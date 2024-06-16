@@ -1,0 +1,4 @@
+Model Name,Year,Architecture Type,Key Features,Paper Link
+BERT,2018,Transformer,"Bidirectional, Pre-training and Fine-tuning",https://arxiv.org/abs/1810.04805
+GPT-3,2020,Transformer,"175 billion parameters, Few-shot learning",https://arxiv.org/abs/2005.14165
+T5,2019,Transformer,"Text-to-Text framework",https://arxiv.org/abs/1910.10683

@@ -1,0 +1,25 @@
+{
+    "lectures": [
+      {
+        "title": "Introduction to Machine Learning",
+        "content": "Machine learning is a method of data analysis that automates analytical model building...",
+        "sections": {
+          "introduction": "Machine learning is a method of data analysis...",
+          "methodologies": "There are various methodologies including supervised learning...",
+          "results": "The results of these methods can be seen in various applications...",
+          "conclusion": "In conclusion, machine learning provides a powerful tool..."
+        }
+      },
+      {
+        "title": "Neural Networks",
+        "content": "Neural networks are a series of algorithms that attempt to recognize underlying relationships...",
+        "sections": {
+          "introduction": "Neural networks are a series of algorithms...",
+          "methodologies": "The most common type of neural network is the feedforward neural network...",
+          "results": "The accuracy of neural networks can be observed in image recognition...",
+          "conclusion": "In conclusion, neural networks have significantly advanced..."
+        }
+      }
+    ]
+  }
+  
