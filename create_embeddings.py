@@ -1,50 +1,74 @@
 import json
+import numpy as np
 import pandas as pd
-import faiss
 from transformers import AutoTokenizer, AutoModel
 import torch
-import numpy as np
 
-# Load pre-trained model and tokenizer
+
+# Define the actual model name you will use for generating embeddings
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 model = AutoModel.from_pretrained('bert-base-uncased')
 
-# Function to create embeddings
-def embed_text(text):
-    inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True, max_length=512)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    return outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
+# # Function to generate embeddings for a given text
+# def generate_embeddings(text, tokenizer, model):
+#     inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True, max_length=512)
+#     with torch.no_grad():
+#         outputs = model(**inputs)
+#     return outputs.last_hidden_state.mean(dim=1).numpy()
 
-# Load lecture notes data
-with open('lecture_notes.json', 'r') as f:
-    lecture_data = json.load(f)
+# # Load lecture notes
+# with open('lectures_notes.json', 'r') as f:
+#     lecture_data = json.load(f)
 
-# Create FAISS index
-d = 768  # Dimension of embeddings
-index = faiss.IndexFlatL2(d)
+# lecture_notes = lecture_data['lectures']
 
-# Embed and add lecture notes to index
-lecture_embeddings = []
-for lecture in lecture_data['lectures']:
-    embedding = embed_text(lecture['content'])
-    lecture_embeddings.append(embedding)
-    index.add(np.array([embedding]))
+# # Load LLM architectures
+# llm_architectures = pd.read_csv('llm_architectures.csv')
 
-# Save the index and embeddings
-faiss.write_index(index, 'lecture_notes.index')
-np.save('lecture_embeddings.npy', np.array(lecture_embeddings))
+# # Combine the data into a single list of texts to embed
+# texts = []
 
-# Load LLM architectures data
-llm_df = pd.read_csv('llm_architectures.csv')
+# # Extract text from lecture notes
+# for lecture in lecture_notes:
+#     texts.append(lecture['content'])  
+# # Extract text from LLM architectures
+# for _, row in llm_architectures.iterrows():
+#     texts.append(row['Key Features'])  
 
-# Create embeddings for LLM descriptions
-llm_embeddings = []
-for _, row in llm_df.iterrows():
-    description = f"{row['Model Name']} {row['Year']} {row['Architecture Type']} {row['Key Features']}"
-    embedding = embed_text(description)
-    llm_embeddings.append(embedding)
-    index.add(np.array([embedding]))
+# # Generate embeddings for all texts
+# embeddings = []
+# for text in texts:
+#     embeddings.append(generate_embeddings(text, tokenizer, model))
 
-# Save the LLM embeddings
-np.save('llm_embeddings.npy', np.array(llm_embeddings))
+# embeddings = np.vstack(embeddings)
+
+# # Save the embeddings and associated texts
+# np.save('embeddings.npy', embeddings)
+# with open('texts.json', 'w') as f:
+#     json.dump(texts, f)
+
+# print("Embeddings and texts have been saved.")
+
+# ------------------------The Above approach is for json file structure notes
+# -----------And below is creating embedding of raw data which got preprocesed
+
+from transformers import AutoTokenizer, AutoModel
+from preprocessing import sentences
+
+# Function to create embeddings for a list of sentences
+def create_embeddings(sentences):
+    embeddings = []
+    for sentence in sentences:
+        inputs = tokenizer(sentence, return_tensors='pt', truncation=True, padding=True, max_length=512)
+        with torch.no_grad():
+            outputs = model(**inputs)
+        # Take the mean of the last hidden state across tokens to get sentence embedding
+        sentence_embedding = outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
+        embeddings.append(sentence_embedding)
+    return np.array(embeddings)
+
+# Create embeddings for tokenized sentences
+sentence_embeddings = create_embeddings(sentences)
+
+# Save embeddings
+np.save('sentence_embeddings.npy', sentence_embeddings)
