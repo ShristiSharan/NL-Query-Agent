@@ -39,10 +39,10 @@ Natural Language Query Agent to answer questions over a small set of lecture not
 
 ## Setup
 
-1. Clone the repository:
+1. Fork and Clone the repository:
     ```bash
-    git clone https://github.com/your-username/ema-intern-challenge.git
-    cd ema-intern-challenge
+    git clone https://github.com/your-username/NL-Query-Agent.git
+    cd NL-Query-Agent
     ```
 
 2. Set up the environment:
@@ -54,6 +54,7 @@ Natural Language Query Agent to answer questions over a small set of lecture not
 
 3. Run the application:
     ```bash
+    python query_agent.py
 
     ```
 
